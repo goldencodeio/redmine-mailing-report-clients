@@ -2,25 +2,48 @@ function formatDate(date) {
   return date.toJSON().split('T').shift();
 }
 
-function formatTodayDate() {
-  var date = new Date();
-  date.setHours(date.getHours() - 1 * date.getTimezoneOffset() / 60);  
-  return formatDate(date);
-}
-
 function getDateRage(startDate, finalDate) {
   return '><' + formatDate(startDate) + '|' + formatDate(finalDate);
 }
 
-function getDateRangeWithTime(startDate, finalDate) {
-  var startDate = startDate.toJSON().split('.').shift() + 'Z';
-  var finalDate = finalDate.toJSON().split('.').shift() + 'Z';
-  return '><' + startDate + '|' + finalDate;
+function stringRating(number) {
+  if (number < 3) return 'плохо';
+  else if (number < 4) return 'удовлетворительно';
+  else if (number < 4.5) return 'хорошо';
+  else if (number < 5) return 'очень хорошо';
+  else if (number >= 5) return 'отлично';
 }
 
-function getHoursByRange(startDate, finalDate) {
-  return (finalDate.getTime() - startDate.getTime()) / (1000 * 60 * 60) - 1;
+function stringMonth(date) {
+  var month = date.getMonth();
+  var rusMonth = '';
+  switch (month) {
+    case 0: rusMonth = 'январь'; break;
+    case 1: rusMonth = 'февраль'; break;
+    case 2: rusMonth = 'март'; break;
+    case 3: rusMonth = 'апрель'; break;
+    case 4: rusMonth = 'май'; break;
+    case 5: rusMonth = 'июнь'; break;
+    case 6: rusMonth = 'июль'; break;
+    case 7: rusMonth = 'август'; break;
+    case 8: rusMonth = 'сентябрь'; break;
+    case 9: rusMonth = 'октябрь'; break;
+    case 10: rusMonth = 'ноябрь'; break;
+    case 11: rusMonth = 'декабрь'; break;
+    default: rusMonth = '';
+  }
+  return rusMonth;
 }
+
+// function getDateRangeWithTime(startDate, finalDate) {
+//   var startDate = startDate.toJSON().split('.').shift() + 'Z';
+//   var finalDate = finalDate.toJSON().split('.').shift() + 'Z';
+//   return '><' + startDate + '|' + finalDate;
+// }
+//
+// function getHoursByRange(startDate, finalDate) {
+//   return (finalDate.getTime() - startDate.getTime()) / (1000 * 60 * 60) - 1;
+// }
 
 function filterUniqueArray(arr) {
   return arr.sort(function(a,b){return a.id > b.id ? 1 : -1;}).reduce(function(arr, el){

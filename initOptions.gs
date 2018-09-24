@@ -8,5 +8,5 @@ function initOptions() {
   var sheetName = 'Тексты писем';
   var existingSheet = _ss.getSheetByName(sheetName);
   if (existingSheet) _ss.deleteSheet(existingSheet);
-  _ss.insertSheet(sheetName).activate();
+  _ss.insertSheet(sheetName).setColumnWidth(1, 1000).activate();
 }
