@@ -100,7 +100,7 @@ function getWorkUsers(projects) {
   var users = filterUniqueArray(issues.map(function(issue) {return issue.assigned_to;}));
 
   return users.map(function(user) {
-    userIssues = [];
+    var userIssues = [];
     projects.forEach(function(project) {
       var res = APIRequest('issues', {query: [
         {key: 'project_id', value: project.id},
