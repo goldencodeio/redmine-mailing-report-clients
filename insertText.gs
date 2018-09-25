@@ -38,7 +38,8 @@ function insertText() {
     textMail += 'Стоимость дальнейшей поддержки высчитывается по тарифу _____ руб/ч. В этом месяце для вас работали следующие инженеры нашей компании:\n';
 
     getWorkUsers(projects).forEach(function(user) {
-      textMail += user.name  + ' - ' + user.timeSpend + ' ч. Средняя оценка ' + user.ratingAvg + '\n';
+      if (user.timeSpend > 0)
+        textMail += user.name  + ' - ' + user.timeSpend + ' ч. Средняя оценка ' + user.ratingAvg + '\n';
     });
 
     var timeSpendByProjects = getTimeSpendByProjects(projects);
