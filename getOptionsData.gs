@@ -18,7 +18,8 @@ function getOptionsData(reportType) {
   OPTIONS.startDate.setHours(OPTIONS.startDate.getHours() - 1 * OPTIONS.startDate.getTimezoneOffset() / 60);
   OPTIONS.finalDate.setHours(OPTIONS.finalDate.getHours() - 1 * OPTIONS.finalDate.getTimezoneOffset() / 60);
 
-  if (!Array.isArray(OPTIONS.numbersContracts)) OPTIONS.numbersContracts = [OPTIONS.numbersContracts];
+  if (!Array.isArray(OPTIONS.contractNumbers)) OPTIONS.contractNumbers = [OPTIONS.contractNumbers];
+  if (!Array.isArray(OPTIONS.companyName)) OPTIONS.companyName = [OPTIONS.companyName];
 }
 
 function getOptionsSheet() {
