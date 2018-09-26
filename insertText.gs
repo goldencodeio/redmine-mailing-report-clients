@@ -62,7 +62,7 @@ function getTotalRatingAvg() {
   var res = APIRequest('issues', {query: [
     {key: 'tracker_id', value: 7},
     {key: 'status_id', value: '*'},
-    {key: 'created_on', value: getDateRage(OPTIONS.startDate, OPTIONS.finalDate)},
+    {key: 'created_on', value: getDateRange()},
     {key: 'cf_7', value: '*'}
   ]});
 
@@ -77,7 +77,7 @@ function getQuantityRatings(rating) {
   var res = APIRequest('issues', {query: [
     {key: 'tracker_id', value: 7},
     {key: 'status_id', value: '*'},
-    {key: 'created_on', value: getDateRage(OPTIONS.startDate, OPTIONS.finalDate)},
+    {key: 'created_on', value: getDateRange()},
     {key: 'cf_7', value: rating}
   ]});
 
@@ -89,8 +89,9 @@ function getWorkUsers(projects) {
   projects.forEach(function(project) {
     var res = APIRequest('issues', {query: [
       {key: 'project_id', value: project.id},
+      {key: 'tracker_id', value: '!5'},
       {key: 'status_id', value: '*'},
-      {key: 'created_on', value: getDateRage(OPTIONS.startDate, OPTIONS.finalDate)}
+      {key: 'created_on', value: getDateRange()}
     ]});
 
     issues = issues.concat(res.issues);
@@ -103,9 +104,10 @@ function getWorkUsers(projects) {
     projects.forEach(function(project) {
       var res = APIRequest('issues', {query: [
         {key: 'project_id', value: project.id},
-        {key: 'assigned_to_id', value: user.id},        
+        {key: 'assigned_to_id', value: user.id},
+        {key: 'tracker_id', value: '!5'},
         {key: 'status_id', value: '*'},
-        {key: 'created_on', value: getDateRage(OPTIONS.startDate, OPTIONS.finalDate)},
+        {key: 'created_on', value: getDateRange()},
         {key: 'cf_7', value: '*'}
       ]});
 
@@ -123,7 +125,7 @@ function getWorkUsers(projects) {
       var res = APIRequest('time_entries', {query: [
         {key: 'user_id', value: user.id},
         {key: 'project_id', value: project.id},
-        {key: 'spent_on', value: getDateRage(OPTIONS.startDate, OPTIONS.finalDate)}
+        {key: 'spent_on', value: getDateRange()}
       ]});
 
       timeSpend += res.time_entries.reduce(function(a, c) {
@@ -144,7 +146,7 @@ function getTimeSpendByProjects(projects) {
   projects.forEach(function(project) {
     var res = APIRequest('time_entries', {query: [
       {key: 'project_id', value: project.id},
-      {key: 'spent_on', value: getDateRage(OPTIONS.startDate, OPTIONS.finalDate)}
+      {key: 'spent_on', value: getDateRange()}
     ]});
 
     timeSpend += res.time_entries.reduce(function(a, c) {

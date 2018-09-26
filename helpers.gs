@@ -2,8 +2,8 @@ function formatDate(date) {
   return date.toJSON().split('T').shift();
 }
 
-function getDateRage(startDate, finalDate) {
-  return '><' + formatDate(startDate) + '|' + formatDate(finalDate);
+function getDateRange() {
+  return '><' + formatDate(OPTIONS.startDate) + '|' + formatDate(OPTIONS.finalDate);
 }
 
 function stringRating(number) {
@@ -30,7 +30,6 @@ function stringMonth(date) {
     case 9: rusMonth = 'октябрь'; break;
     case 10: rusMonth = 'ноябрь'; break;
     case 11: rusMonth = 'декабрь'; break;
-    default: rusMonth = '';
   }
   return rusMonth;
 }
