@@ -2,11 +2,6 @@ function insertText() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var rowI = 1;
   var allProjects = APIRequest('projects').projects;
-  var totalRatingAvg = getTotalRatingAvg();
-  var quantityRatings5 = getQuantityRatings(5);
-  var quantityRatings4 = getQuantityRatings(4);
-  var quantityRatings3 = getQuantityRatings(3);
-  var quantityRatings2 = getQuantityRatings(2);
 
   OPTIONS.contractNumbers.forEach(function(contract, indexContract) {
     var regExpProject = new RegExp('^' + contract + '-[0-9]+-SUP');
@@ -23,13 +18,16 @@ function insertText() {
     textMail += stringMonth(OPTIONS.startDate) + ' ' + OPTIONS.startDate.getFullYear() + ' г.';
     textMail += ' по всем оказанным нами работам для Компании ';
     textMail += OPTIONS.companyName[indexContract];
+
+    var totalRatingAvg = getTotalRatingAvg(projects);
+
     textMail += '. Средняя оценка ваших коллег нашей работы составляет ' + totalRatingAvg;
     textMail += ', что соответствует качественному параметру "' + stringRating(totalRatingAvg) + '". ';
     textMail += 'В этом месяце ваши коллеги поставили следующее количество оценок:\n';
-    textMail += '5 - ' + quantityRatings5 + '\n';
-    textMail += '4 - ' + quantityRatings4 + '\n';
-    textMail += '3 - ' + quantityRatings3 + '\n';
-    textMail += '2 - ' + quantityRatings2 + '\n\n';
+    textMail += '5 - ' + getQuantityRatings(5, projects) + '\n';
+    textMail += '4 - ' + getQuantityRatings(4, projects) + '\n';
+    textMail += '3 - ' + getQuantityRatings(3, projects) + '\n';
+    textMail += '2 - ' + getQuantityRatings(2, projects) + '\n\n';
     textMail += 'Задачи, оцененные на 2 и 3 не включаются в отчет, мы не берем за них деньги и не вычитаем включенные в договор часы. ';
     textMail += 'Они уже рассмотрены в качестве претензий и обрабатываются отделом контроля качества. ';
     textMail += 'По ним мы проводим работу и предпринимаем соответсвующие меры по улучшению качества нашей работы.\n\n';
@@ -58,30 +56,42 @@ function insertText() {
   });
 }
 
-function getTotalRatingAvg() {
-  var res = APIRequest('issues', {query: [
-    {key: 'tracker_id', value: 7},
-    {key: 'status_id', value: '*'},
-    {key: 'created_on', value: getDateRange()},
-    {key: 'cf_7', value: '*'}
-  ]});
+function getTotalRatingAvg(projects) {
+  var issues = [];
+  projects.forEach(function(project) {
+    var res = APIRequest('issues', {query: [
+      {key: 'project_id', value: project.id},
+      {key: 'tracker_id', value: '!5'},
+      {key: 'status_id', value: '*'},
+      {key: 'created_on', value: getDateRange()},
+      {key: 'cf_7', value: '*'}
+    ]});
 
-  var sum = res.issues.reduce(function(a, c) {
+    issues = issues.concat(res.issues);
+  });
+
+  var sum = issues.reduce(function(a, c) {
     return a + parseInt(c.custom_fields.find(function(i) {return i.id === 7}).value, 10);
   }, 0);
 
-  return res.issues.length ? sum / res.issues.length : 0;
+  return issues.length ? sum / issues.length : 0;
 }
 
-function getQuantityRatings(rating) {
-  var res = APIRequest('issues', {query: [
-    {key: 'tracker_id', value: 7},
-    {key: 'status_id', value: '*'},
-    {key: 'created_on', value: getDateRange()},
-    {key: 'cf_7', value: rating}
-  ]});
+function getQuantityRatings(rating, projects) {
+  var issues = [];
+  projects.forEach(function(project) {
+    var res = APIRequest('issues', {query: [
+      {key: 'project_id', value: project.id},
+      {key: 'tracker_id', value: '!5'},
+      {key: 'status_id', value: '*'},
+      {key: 'created_on', value: getDateRange()},
+      {key: 'cf_7', value: rating}
+    ]});
 
-  return res.issues.length
+    issues = issues.concat(res.issues);
+  });
+
+  return issues.length
 }
 
 function getWorkUsers(projects) {
