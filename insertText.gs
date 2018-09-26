@@ -89,7 +89,6 @@ function getWorkUsers(projects) {
   projects.forEach(function(project) {
     var res = APIRequest('issues', {query: [
       {key: 'project_id', value: project.id},
-      {key: 'tracker_id', value: 7},
       {key: 'status_id', value: '*'},
       {key: 'created_on', value: getDateRage(OPTIONS.startDate, OPTIONS.finalDate)}
     ]});
@@ -104,8 +103,7 @@ function getWorkUsers(projects) {
     projects.forEach(function(project) {
       var res = APIRequest('issues', {query: [
         {key: 'project_id', value: project.id},
-        {key: 'assigned_to_id', value: user.id},
-        {key: 'tracker_id', value: 7},
+        {key: 'assigned_to_id', value: user.id},        
         {key: 'status_id', value: '*'},
         {key: 'created_on', value: getDateRage(OPTIONS.startDate, OPTIONS.finalDate)},
         {key: 'cf_7', value: '*'}
